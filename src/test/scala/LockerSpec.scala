@@ -1,0 +1,20 @@
+import org.scalatest.FunSuite
+import com.tw.oocamp._
+class LockerSuite extends FunSuite {
+  test("given a locker when locker store a bag after should can't store same Bag again") {
+    val locker = new Locker();
+    val bag = new Bag();
+    try {
+      locker.store(bag)
+    }
+    catch {
+      case _: Exception => {
+        fail()
+      }
+    }
+
+    intercept[Exception] {
+      locker.store(bag)
+    }
+  }
+}
