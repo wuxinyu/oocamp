@@ -1,15 +1,20 @@
 package com.tw.oocamp
 
-import scala.collection.mutable._
-
 /**
  * Created by wuxy on 2014/6/28.
  */
 class Locker {
-  private var _store = Set[Bag]()
-  def store(bag:Bag) = {
-    if(_store.contains(bag))
-      throw new IllegalArgumentException()
-    _store+=bag
+  private var store = collection.mutable.Map[Ticket,Bag]()
+
+  def store(bag:Bag):Ticket = {
+    val ticket = new Ticket()
+    if(store.count(tb=>tb._2==bag)>0) throw new IllegalArgumentException() else store+=ticket->bag
+    ticket
+  }
+
+  def pick(ticket:Ticket):Bag = {
+      val bag = store(ticket)
+      store-=ticket
+      bag
   }
 }
