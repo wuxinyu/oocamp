@@ -1,8 +1,6 @@
 package com.tw.oocamp
 
-/**
- * Created by wuxy on 2014/6/28.
- */
+
 class Locker(size: Int = 1) {
 
   private val store = collection.mutable.Map[Option[Ticket], Bag]()
@@ -14,7 +12,7 @@ class Locker(size: Int = 1) {
   }
 
   def pick(ticket: Option[Ticket]): Bag = {
-    val bagOption = if (isValidTicket(ticket)) store.remove(ticket) else None
+    val bagOption = if (isValid(ticket)) store.remove(ticket) else None
 
     bagOption match {
       case Some(bag) => bag
@@ -22,7 +20,7 @@ class Locker(size: Int = 1) {
     }
   }
 
-  def isValidTicket(ticket: Option[Ticket]): Boolean = {
+  def isValid(ticket: Option[Ticket]): Boolean = {
     store.contains(ticket)
   }
 
@@ -33,4 +31,9 @@ class Locker(size: Int = 1) {
   def remainingCount(): Int = {
     size - store.size
   }
+
+  def allCount():Int={
+    size
+  }
+
 }

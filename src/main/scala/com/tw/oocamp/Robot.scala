@@ -1,35 +1,20 @@
 package com.tw.oocamp
 
-import collection.mutable.ListBuffer
 /**
- * Created by twer on 6/30/14.
+ * Created by twer on 7/3/14.
  */
-class Robot(size:Int=1){
+abstract class Robot {
 
-  protected val innerLockers:ListBuffer[Locker] = ListBuffer[Locker]()
+  protected def getStoredLocker(ticket:Option[Ticket]):Option[Locker]
+  protected def getStorableLocker():Option[Locker]
 
-  def store(bag: Bag): Option[Ticket] ={
-    appropriateLocker match {
-      case Some(locker) => locker.store(bag)
-      case _=>None
-    }
+  def store(bag:Bag)={
+    getStorableLocker match {case Some(locker)=>locker.store(bag) case _=>None}
   }
 
-  protected def appropriateLocker():Option[Locker]={
-    innerLockers collectFirst { case locker if !locker.isFull => locker}
+  def pick(ticket:Option[Ticket]):Bag={
+    getStoredLocker(ticket) match {case Some(locker)=>locker.pick(ticket) case _=>null}
   }
 
-  def pick(ticket: Option[Ticket]):Bag = {
-    val bagOption = innerLockers collectFirst { case locker if locker.isValidTicket(ticket)=>locker.pick(ticket)}
-    bagOption match {
-      case Some(bag)=>bag
-      case _=>null
-    }
-  }
-
-  def manage(locker: Locker){
-    if(innerLockers.length==size) throw new IllegalArgumentException()
-    innerLockers+=locker
-  }
-
+  def manage(locker:Locker)
 }

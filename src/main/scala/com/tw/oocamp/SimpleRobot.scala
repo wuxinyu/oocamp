@@ -1,13 +1,13 @@
 package com.tw.oocamp
 
-import scala.collection.mutable.ListBuffer
+import collection.mutable.ListBuffer
 
-class SmartRobot(size:Int=1) extends Robot{
+class SimpleRobot(size:Int=1) extends Robot {
 
   private val innerLockers:ListBuffer[Locker] = ListBuffer[Locker]()
 
   protected override def getStorableLocker():Option[Locker]={
-    Option(innerLockers.map(v=>(v.remainingCount(),v)).toSeq.sortBy(_._1).reverse.head._2)
+    innerLockers collectFirst { case locker if !locker.isFull => locker}
   }
 
   protected override def getStoredLocker(ticket:Option[Ticket]):Option[Locker]={
@@ -18,5 +18,5 @@ class SmartRobot(size:Int=1) extends Robot{
     if(innerLockers.length==size) throw new IllegalArgumentException()
     innerLockers+=locker
   }
-}
 
+}

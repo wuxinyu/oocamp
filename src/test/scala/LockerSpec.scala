@@ -42,7 +42,7 @@ class LockerSuite extends FunSuite {
   }
 
   test("given robot should take a ticket to robot that has not manage a locker yet then can't return bag") {
-    val robot = new Robot()
+    val robot = new SimpleRobot()
     val ticket = (new Locker).store(new Bag)
     assert(null==robot.pick(ticket))
   }
@@ -51,14 +51,14 @@ class LockerSuite extends FunSuite {
     val bag = new Bag()
     val locker = new Locker();
     val ticket = locker.store(bag)
-    val robot = new Robot()
+    val robot = new SimpleRobot()
     robot.manage(locker)
     assert(robot.pick(ticket) == bag)
   }
 
   test("given robot when robot manage some lockers then robot should store bag with seq") {
     val bag = new Bag()
-    val robot = new Robot(3)
+    val robot = new SimpleRobot(3)
     val locker1st=new Locker()
     val locker2nd = new Locker()
     val locker3rd= new Locker()
@@ -109,5 +109,23 @@ class LockerSuite extends FunSuite {
 
   }
 
+  test("given super robot when store a bag then bag should shtored in locker has max vacancy rate") {
+    var superRobot = new SuperRobot(2)
+    val locker2 = new Locker(2)
+    val locker6 = new Locker(6)
 
+    locker2.store(new Bag())
+    locker6.store(new Bag())
+    locker6.store(new Bag())
+    locker6.store(new Bag())
+    locker6.store(new Bag())
+
+    val bag = new Bag()
+    superRobot.manage(locker2)
+    superRobot.manage(locker6)
+
+    val ticket = superRobot.store(bag)
+
+    assert(bag == locker2.pick(ticket))
+  }
 }
